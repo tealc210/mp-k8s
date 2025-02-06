@@ -37,10 +37,18 @@ spec:
             secretKeyRef:
               name: db-secrets
               key: db-root-pass
+        - name: MYSQL_DATABASE
+          value: db_paymybuddy
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: data
+        - mountPath: /docker-entrypoint-initdb.d/
+          name: init
+          readOnly: true
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: data-pvc
+        - name: init
+          secret:
+            secretName: init-script
