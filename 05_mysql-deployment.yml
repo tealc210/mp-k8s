@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  namespace: paymybuddy
+  labels:
+    task: deploy-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: infra-db
+  template:
+    metadata:
+      labels:
+        role: infra-db
+        group: db
+    spec:
+      containers:
+      - name: pmb-db
+        image: mysql:8.0.40-debian
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: db-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: db-pass
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: db-root-pass
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: data-pvc

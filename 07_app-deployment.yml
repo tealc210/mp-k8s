@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  namespace: paymybuddy
+  labels:
+    task: deploy-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: infra-app
+  template:
+    metadata:
+      labels:
+        role: infra-app
+        group: app
+    spec:
+      containers:
+      - name: paymybuddy
+        image: tealc210/paymybuddy:latest
+        ports:
+        - containerPort: 3306
+        env:
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: db-user
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secrets
+              key: db-pass
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:mysql://pmb-db.paymybuddy.svc.cluster.local:3306/db_paymybuddy"
+      imagePullSecrets:
+      - name: regcred
