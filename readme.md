@@ -3,11 +3,15 @@
 - running minikube
 - kubectl binary
 
-> **!!!DISCLAIMER!!!
-> In case you're using the minikube docker driver, you'll have to change the value of iptables.masqueradeAll to true in the kube-proxy confimap, and restart the corresponding pod :
+> !!!DISCLAIMER!!!
+> 
+> In case you're using the minikube docker driver, you'll have to change the value of 'iptables.masqueradeAll' to true in the kube-proxy confimap, and restart the corresponding pod :
+> 
 > \> kubectl -n kube-system edit cm kube-proxy
+> 
 > \> kubectl -n kube-system delete pod -l k8s-app=kube-proxy
-> !!!DISCLAIMER!!!**
+> 
+> !!!DISCLAIMER!!!
 
 #### Deploy PayMyBuddy on your node(s) :
 
@@ -28,6 +32,7 @@ Then launch the deployment :
 ![](images/20250206_225847_deploy.png)
 
 Finally, in order to access your newly deployed PayMyBuddy app, you'll need to forward the port :
+
 `> kubectl port-forward service/pmb-app --address <IP_OF_MINIKUBE_HOST> -n paymybuddy 8080`
 
 ![](images/20250206_230858_access.png)
