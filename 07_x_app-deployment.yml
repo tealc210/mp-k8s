@@ -20,7 +20,7 @@ spec:
       - name: paymybuddy
         image: tealc210/paymybuddy:latest
         ports:
-        - containerPort: 3306
+        - containerPort: 8080
         env:
         - name: SPRING_DATASOURCE_USERNAME
           valueFrom:
@@ -34,5 +34,3 @@ spec:
               key: db-pass
         - name: SPRING_DATASOURCE_URL
           value: "jdbc:mysql://pmb-db.paymybuddy.svc.cluster.local:3306/db_paymybuddy"
-      imagePullSecrets:
-      - name: regcred
